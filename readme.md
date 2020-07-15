@@ -3,7 +3,7 @@
 	在epoch为64时，训练集和测试集准确率骤降至50%；
 **result6**：
         以CycleGAN数据作为输入，不进行norm_channel；
-	~~在epoch为10时，准确率骤降;~~
+	~~在epoch为10时，准确率骤降;~~(是因为学习率发生了改变)
 	正确率正常
 
 >[2020-07-13 20:30:45.273 CST ~~ INFO    ] Epoch   189 train_loss: 0.145566347547, train_acc: 0.966044776119, val_loss: 0.237934307406, val_acc: 0.938988095238, test_loss: 3.14534151822, test_acc: 0.774621212121
@@ -33,3 +33,9 @@ resultAutoGan2：
  将` O = Dense(128,  activation='relu')(O)`改为`O = Dense(64,  activation='relu')(O)`；
 
 无论增减全连接个数，抑或增加层数，效果不显著；
+
+将全连接层删除，效果有提升；但是到了epoch=10时，学习率从0.01变至0.1(是因为代码中schedule函数，针对resnet进行了学习率的调整)
+
+将全连接层删除后，可以将batch_size从8提升至16；
+
+` python scripts/run.py train -w ./resultAutoGan2 --dataset others --model complex --batch-size 16 --schedule null`
